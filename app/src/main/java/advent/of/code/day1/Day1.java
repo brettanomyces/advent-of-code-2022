@@ -1,5 +1,12 @@
 package advent.of.code.day1;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 /*
  * --- Day 1: Calorie Counting ---
  *
@@ -52,18 +59,24 @@ package advent.of.code.day1;
  * fourth Elf).
  *
  * Find the Elf carrying the most Calories. How many total Calories is that Elf carrying?
+ *
+ * --- Part Two ---
+ *
+ * By the time you calculate the answer to the Elves' question, they've already realized that the Elf carrying the most
+ * Calories of food might eventually run out of snacks.
+ *
+ * To avoid this unacceptable situation, the Elves would instead like to know the total Calories carried by the top
+ * three Elves carrying the most Calories. That way, even if one of those Elves runs out of snacks, they still have two
+ * backups.
+ *
+ * In the example above, the top three Elves are the fourth Elf (with 24000 Calories), then the third Elf (with 11000
+ * Calories), then the fifth Elf (with 10000 Calories). The sum of the Calories carried by these three elves is 45000.
+ *
+ * Find the top three Elves carrying the most Calories. How many Calories are those Elves carrying in total?
  */
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-
 public class Day1 {
 
-  public static void main(String ... args) throws URISyntaxException, IOException {
+  public static void main(String... args) throws URISyntaxException, IOException {
 
     URL inputPath = Day1.class.getClassLoader().getResource("day1.input");
 
