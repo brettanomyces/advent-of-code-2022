@@ -68,21 +68,48 @@ public class Day1 {
     URL inputPath = Day1.class.getClassLoader().getResource("day1.input");
 
     String line;
-    int best = 0;
     int current = 0;
+    CalorieCount calories = new CalorieCount();
 
     try (BufferedReader br = Files.newBufferedReader(Path.of(inputPath.toURI()))) {
       while ((line = br.readLine()) != null) {
         if (line.isEmpty()) {
-          if (current > best) {
-            best = current;
-          }
+          calories.update(current);
           current = 0;
         } else {
           current += Integer.parseInt(line);
         }
       }
+      calories.update(current);
+
     }
-    System.out.println(best);
+    System.out.println(calories.total());
+  }
+
+  public static class CalorieCount {
+
+    private int first = 0;
+    private int second = 0;
+    private int third = 0;
+
+    public void update(int currentElf) {
+      if (currentElf > first) {
+        third = second;
+        second = first;
+        first = currentElf;
+      } else if (currentElf > second) {
+        third = second;
+        second = currentElf;
+      } else if (currentElf > third) {
+        third = currentElf;
+      }
+    }
+
+    public int total() {
+      System.out.println("first: " + first);
+      System.out.println("second: " + second);
+      System.out.println("third: " + third);
+      return first + second + third;
+    }
   }
 }
