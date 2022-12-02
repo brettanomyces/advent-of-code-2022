@@ -6,7 +6,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.EnumSet;
 
 /*
  * --- Day 2: Rock Paper Scissors ---
@@ -42,29 +41,52 @@ import java.util.EnumSet;
  *
  * This strategy guide predicts and recommends the following:
  *
- *     In the first round, your opponent will choose Rock (A), and you should choose Paper (Y). This ends in a win for you with a score of 8 (2 because you chose Paper + 6 because you won).
- *     In the second round, your opponent will choose Paper (B), and you should choose Rock (X). This ends in a loss for you with a score of 1 (1 + 0).
+ *     In the first round, your opponent will choose Rock (A), and you should choose Paper (Y). This ends in a win for
+ *         you with a score of 8 (2 because you chose Paper + 6 because you won).
+ *     In the second round, your opponent will choose Paper (B), and you should choose Rock (X). This ends in a loss for
+ *         you with a score of 1 (1 + 0).
  *     The third round is a draw with both players choosing Scissors, giving you a score of 3 + 3 = 6.
  *
  * In this example, if you were to follow the strategy guide, you would get a total score of 15 (8 + 1 + 6).
  *
  * What would your total score be if everything goes exactly according to your strategy guide?
+ *
+ * --- Part Two ---
+ *
+ * The Elf finishes helping with the tent and sneaks back over to you. "Anyway, the second column says how the round
+ * needs to end: X means you need to lose, Y means you need to end the round in a draw, and Z means you need to win.
+ * Good luck!"
+ *
+ * The total score is still calculated in the same way, but now you need to figure out what shape to choose so the round
+ * ends as indicated. The example above now goes like this:
+ *
+ *     In the first round, your opponent will choose Rock (A), and you need the round to end in a draw (Y), so you also
+ *         choose Rock. This gives you a score of 1 + 3 = 4.
+ *     In the second round, your opponent will choose Paper (B), and you choose Rock so you lose (X) with a score of
+ *         1 + 0 = 1.
+ *     In the third round, you will defeat your opponent's Scissors with Rock for a score of 1 + 6 = 7.
+ *
+ * Now that you're correctly decrypting the ultra top secret strategy guide, you would get a total score of 12.
+ *
+ * Following the Elf's instructions for the second column, what would your total score be if everything goes exactly
+ * according to your strategy guide?
+ *
  */
-public class Day2 {
+public class Part2 {
 
   public static void main(String[] args) throws IOException, URISyntaxException {
 
-    URL inputPath = Day2.class.getClassLoader().getResource("day2.input");
+    URL inputPath = Part2.class.getClassLoader().getResource("day2.input");
 
     int total = 0;
 
     String line;
     try (BufferedReader br = Files.newBufferedReader(Path.of(inputPath.toURI()))) {
       while ((line = br.readLine()) != null) {
-        Attack attack = parseAttack(line);
-        Response response = parseResponse(line);
-        Result result = response.to(attack);
-        int score = response.value() + result.value();
+        Move attack = parseAttack(line);
+        Result result = parseResult(line);
+        Move response = determineResponse(attack, result);
+        int score = response.value + result.value;
         total += score;
       }
     }
@@ -72,22 +94,35 @@ public class Day2 {
     System.out.println("Total score: " + total);
   }
 
-  public static Attack parseAttack(String line) {
+  public static Move parseAttack(String line) {
     String encoding = line.substring(0, 1);
-    return EnumSet.allOf(Attack.class)
-        .stream()
-        .filter(a -> a.encoding().equals(encoding))
-        .findFirst()
-        .orElseThrow();
+    return switch (encoding) {
+      case "A" -> Move.ROCK;
+      case "B" -> Move.PAPER;
+      case "C" -> Move.SCISSORS;
+      default -> throw new IllegalArgumentException();
+    };
   }
 
-  public static Response parseResponse(String line) {
+  public static Result parseResult(String line) {
     String encoding = line.substring(2, 3);
-    return EnumSet.allOf(Response.class)
-        .stream()
-        .filter(r -> r.encoding().equals(encoding))
-        .findFirst()
-        .orElseThrow();
+    return switch (encoding) {
+      case "X" -> Result.LOSS;
+      case "Y" -> Result.DRAW;
+      case "Z" -> Result.WIN;
+      default -> throw new IllegalArgumentException();
+    };
+  }
+
+  public static Move determineResponse(Move attack, Result result) {
+    if (Result.DRAW.equals(result)) {
+      return attack;
+    } else if (Result.LOSS.equals(result)) {
+      return attack.beat;
+    } else {  // Result.WIN
+      // e.g. attack = ROCK, attack.beat = SCISSORS, attack.beat.beat = PAPER
+      return attack.beat.beat;
+    }
   }
 
   enum Result {
@@ -100,59 +135,24 @@ public class Day2 {
     Result(int value) {
       this.value = value;
     }
-
-    public int value() {
-      return value;
-    }
   }
 
-  enum Attack {
-    ROCK("A"),
-    PAPER("B"),
-    SCISSORS("C");
+  enum Move {
+    ROCK(1),
+    PAPER(2),
+    SCISSORS(3);
 
-    private final String encoding;
-
-    Attack(String encoding) {
-      this.encoding = encoding;
+    static {  // avoid illegal forward reference
+      ROCK.beat = SCISSORS;
+      PAPER.beat = ROCK;
+      SCISSORS.beat = PAPER;
     }
 
-    public String encoding() {
-      return encoding;
-    }
-  }
-
-  enum Response {
-    ROCK("X", 1, Attack.SCISSORS),
-    PAPER("Y", 2, Attack.ROCK),
-    SCISSORS("Z", 3, Attack.PAPER);
-
-    private final String encoding;
     private final int value;
-    private final Attack defeats;
+    private Move beat;
 
-    Response(String encoding, int value, Attack defeats) {
-      this.encoding = encoding;
+    Move(int value) {
       this.value = value;
-      this.defeats = defeats;
-    }
-
-    public String encoding() {
-      return encoding;
-    }
-
-    public int value() {
-      return value;
-    }
-
-    public Result to(Attack attack) {
-      if (defeats.equals(attack)) {
-        return Result.WIN;
-      } else if (this.name().equals(attack.name())) {
-        return Result.DRAW;
-      } else {
-        return Result.LOSS;
-      }
     }
   }
 }
