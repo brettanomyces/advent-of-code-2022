@@ -72,7 +72,7 @@ import java.nio.file.Path;
  * according to your strategy guide?
  *
  */
-public class Part2 {
+class Part2 {
 
   public static void main(String[] args) throws IOException, URISyntaxException {
 

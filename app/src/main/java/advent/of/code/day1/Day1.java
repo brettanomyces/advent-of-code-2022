@@ -74,7 +74,7 @@ import java.nio.file.Path;
  *
  * Find the top three Elves carrying the most Calories. How many Calories are those Elves carrying in total?
  */
-public class Day1 {
+class Day1 {
 
   public static void main(String... args) throws URISyntaxException, IOException {
 

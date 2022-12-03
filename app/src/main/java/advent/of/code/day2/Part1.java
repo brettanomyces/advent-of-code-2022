@@ -73,7 +73,7 @@ import java.util.EnumSet;
  * according to your strategy guide?
  *
  */
-public class Part1 {
+class Part1 {
 
   public static void main(String[] args) throws IOException, URISyntaxException {
 
