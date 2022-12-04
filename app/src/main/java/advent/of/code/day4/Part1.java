@@ -31,8 +31,8 @@ class Part1 {
   }
 
   static class Range {
-    private int start;
-    private int stop;
+    private final int start;
+    private final int stop;
 
     public Range(String encoding) {
       start = Integer.parseInt(encoding.substring(0, encoding.indexOf("-")));
@@ -40,10 +40,7 @@ class Part1 {
     }
 
     public boolean contains(Range range) {
-      if (this.start <= range.start && this.stop >= range.stop) {
-        return true;
-      }
-      return false;
+      return this.start <= range.start && this.stop >= range.stop;
     }
   }
 }
