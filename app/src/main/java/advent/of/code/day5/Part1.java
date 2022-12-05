@@ -9,12 +9,8 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 class Part1 {
-
-  private static final Pattern MOVE_PATTERN = Pattern.compile("move (\\d+) from (\\d+) to (\\d+)");
 
   public static void main(String[] args) {
     URL inputPath = Part1.class.getClassLoader().getResource("day5.input");
@@ -27,27 +23,30 @@ class Part1 {
         if (line.isEmpty()) {  // break
           break;
         }
+
         if (line.startsWith(" 1 ")) {  // stack number line
           continue;
         }
+
         // items will be on idx 1, 5, 9, 13, ...
         int stack = 0;
         for (int i = 1; i < line.length(); i = i + 4) {
+
           stack++;
+
           if (line.charAt(i) == ' ') {
             continue;
           }
-          stackMap.computeIfAbsent(stack, k -> new LinkedList<>())
-              .addFirst(line.charAt(i));  // item at top of the stack is in pos 0
+
+          stackMap.computeIfAbsent(stack, k -> new LinkedList<>()).addFirst(line.charAt(i));
         }
       }
 
       while ((line = br.readLine()) != null) { // process moves
-        Matcher matcher = MOVE_PATTERN.matcher(line);  // e.g. move 1 from 2 to 1;
-        matcher.find();
-        int count = Integer.parseInt(matcher.group(1));
-        int from = Integer.parseInt(matcher.group(2));
-        int to = Integer.parseInt(matcher.group(3));
+        String[] words = line.split(" ");
+        int count = Integer.parseInt(words[1]);
+        int from = Integer.parseInt(words[3]);
+        int to = Integer.parseInt(words[5]);
 
         System.out.printf("move %s from %s to %s%n", count, from, to);
 
@@ -60,17 +59,15 @@ class Part1 {
       }
 
       StringBuilder top = new StringBuilder();
-      for (int i = 1; i < Integer.MAX_VALUE; i++) {
-        if (stackMap.get(i) == null) {
-          break;
-        }
+      int i = 1;
+      while (stackMap.get(i) != null) {
         top.append(stackMap.get(i).removeLast());
+        i++;
       }
 
-      System.out.println("top: " + top.toString());
+      System.out.println("top: " + top);
     } catch (IOException | URISyntaxException e) {
       throw new RuntimeException(e);
     }
-
   }
 }
