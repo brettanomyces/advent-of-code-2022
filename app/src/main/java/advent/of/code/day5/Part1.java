@@ -20,12 +20,9 @@ class Part1 {
       Map<Integer, LinkedList<Character>> stackMap = new HashMap<>();
 
       while ((line = br.readLine()) != null) { // process stacks
-        if (line.isEmpty()) {  // break
-          break;
-        }
-
         if (line.startsWith(" 1 ")) {  // stack number line
-          continue;
+          br.readLine(); // swallow empty line
+          break;
         }
 
         // items will be on idx 1, 5, 9, 13, ...
@@ -48,7 +45,7 @@ class Part1 {
         int from = Integer.parseInt(words[3]);
         int to = Integer.parseInt(words[5]);
 
-        System.out.printf("move %s from %s to %s%n", count, from, to);
+        // System.out.printf("move %s from %s to %s%n", count, from, to);
 
         for (int i = 0; i < count; i++) {
           // take from "from" stack
