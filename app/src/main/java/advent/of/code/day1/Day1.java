@@ -115,13 +115,13 @@ class Day1 implements DailyChallenge {
     return "" + calories.total();
   }
 
-  public static class CalorieCount {
+  private static class CalorieCount {
 
     private int first = 0;
     private int second = 0;
     private int third = 0;
 
-    public void update(int currentElf) {
+    private void update(int currentElf) {
       if (currentElf > first) {
         third = second;
         second = first;
@@ -134,7 +134,7 @@ class Day1 implements DailyChallenge {
       }
     }
 
-    public int total() {
+    private int total() {
       System.out.println("first: " + first);
       System.out.println("second: " + second);
       System.out.println("third: " + third);
