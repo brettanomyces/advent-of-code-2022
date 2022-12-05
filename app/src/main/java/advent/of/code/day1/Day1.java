@@ -1,11 +1,8 @@
 package advent.of.code.day1;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import advent.of.code.DailyChallenge;
+
+import java.util.List;
 
 /*
  * --- Day 1: Calorie Counting ---
@@ -74,29 +71,48 @@ import java.nio.file.Path;
  *
  * Find the top three Elves carrying the most Calories. How many Calories are those Elves carrying in total?
  */
-class Day1 {
+class Day1 implements DailyChallenge {
 
-  public static void main(String... args) throws URISyntaxException, IOException {
+  @Override
+  public String part1(List<String> input) {
 
-    URL inputPath = Day1.class.getClassLoader().getResource("day1.input");
+    int best = 0;
+    int current = 0;
 
-    String line;
+    for (String line : input) {
+      if (line.isEmpty()) {
+        if (current > best) {
+          best = current;
+        }
+        current = 0;
+      } else {
+        current += Integer.parseInt(line);
+      }
+    }
+
+    if (current > best) {
+      best = current;
+    }
+
+    return "" + best;
+  }
+
+  @Override
+  public String part2(List<String> input) {
     int current = 0;
     CalorieCount calories = new CalorieCount();
 
-    try (BufferedReader br = Files.newBufferedReader(Path.of(inputPath.toURI()))) {
-      while ((line = br.readLine()) != null) {
-        if (line.isEmpty()) {
-          calories.update(current);
-          current = 0;
-        } else {
-          current += Integer.parseInt(line);
-        }
+    for (String line : input) {
+      if (line.isEmpty()) {
+        calories.update(current);
+        current = 0;
+      } else {
+        current += Integer.parseInt(line);
       }
-      calories.update(current);
-
     }
-    System.out.println(calories.total());
+    calories.update(current);
+
+    return "" + calories.total();
   }
 
   public static class CalorieCount {
