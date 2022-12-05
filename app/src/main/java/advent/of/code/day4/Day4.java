@@ -1,33 +1,37 @@
 package advent.of.code.day4;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import advent.of.code.DailyChallenge;
 
-class Part2 {
+import java.util.List;
 
-  public static void main(String[] args) {
-    URL inputPath = Part2.class.getClassLoader().getResource("day4.input");
+public class Day4 implements DailyChallenge {
 
+  @Override
+  public String part1(List<String> input) {
     int count = 0;
+    for (String line : input) {
+      Range assignment1 = new Range(line.substring(0, line.indexOf(",")));
+      Range assignment2 = new Range(line.substring(line.indexOf(",") + 1));
 
-    String line;
-    try (BufferedReader br = Files.newBufferedReader(Path.of(inputPath.toURI()))) {
-      while ((line = br.readLine()) != null) {
-        Range assignment1 = new Range(line.substring(0, line.indexOf(",")));
-        Range assignment2 = new Range(line.substring(line.indexOf(",") + 1));
-
-        if (assignment1.overlaps(assignment2)) {
-          count++;
-        }
+      if (assignment1.contains(assignment2) || assignment2.contains(assignment1)) {
+        count++;
       }
-    } catch (IOException | URISyntaxException e) {
-      throw new RuntimeException(e);
     }
-    System.out.println("Count: " + count);
+    return "" + count;
+  }
+
+  @Override
+  public String part2(List<String> input) {
+    int count = 0;
+    for (String line : input) {
+      Range assignment1 = new Range(line.substring(0, line.indexOf(",")));
+      Range assignment2 = new Range(line.substring(line.indexOf(",") + 1));
+
+      if (assignment1.overlaps(assignment2)) {
+        count++;
+      }
+    }
+    return "" + count;
   }
 
   static class Range {
