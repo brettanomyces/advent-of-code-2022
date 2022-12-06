@@ -7,21 +7,29 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-public interface DailyChallenge {
+public abstract class DailyChallenge {
 
-  default String day() {
+  private final List<String> exampleData;
+  private final List<String> data;
+
+  protected DailyChallenge() {
+    exampleData = load(day() + ".example");
+    data = load(day() + ".input");
+  }
+
+  List<String> exampleData() {
+    return exampleData;
+  }
+
+  List<String> data() {
+    return data;
+  }
+
+  private String day() {
     return this.getClass().getSimpleName().toLowerCase();
   }
 
-  default List<String> exampleData() {
-    return load(day() + ".example");
-  }
-
-  default List<String> data() {
-    return load(day() + ".input");
-  }
-
-  default List<String> load(String inputFile) {
+  private List<String> load(String inputFile) {
     try {
       URL resource = this.getClass().getClassLoader().getResource(inputFile);
       return Files.readAllLines(Path.of(resource.toURI()));
@@ -30,7 +38,7 @@ public interface DailyChallenge {
     }
   }
 
-  String part1(List<String> input);
+  public abstract String part1(List<String> input);
 
-  String part2(List<String> input);
+  public abstract String part2(List<String> input);
 }

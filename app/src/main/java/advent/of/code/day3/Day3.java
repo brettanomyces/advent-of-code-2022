@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-class Day3 implements DailyChallenge {
+class Day3 extends DailyChallenge {
 
   @Override
   public String part1(List<String> input) {

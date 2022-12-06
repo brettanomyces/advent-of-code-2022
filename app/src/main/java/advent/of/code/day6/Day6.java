@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-class Day6 implements DailyChallenge {
+class Day6 extends DailyChallenge {
 
   @Override
   public String part1(List<String> input) {
