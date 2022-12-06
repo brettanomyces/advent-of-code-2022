@@ -28,10 +28,13 @@ class Day6 implements DailyChallenge {
   }
 
   private static boolean uniqueSequence(char[] chars, int sequenceStartIndex, int sequenceSize) {
-    Set<Character> characterSet = new HashSet<>();
-    for (int i = sequenceStartIndex; i < sequenceStartIndex + sequenceSize; i++) {
-      characterSet.add(chars[i]);
+    Set<Character> seen = new HashSet<>();
+    for (int i = 0; i < sequenceSize; i++) {
+      seen.add(chars[sequenceStartIndex + i]);
+      if (seen.size() < i + 1) {
+        return false;
+      }
     }
-    return characterSet.size() == sequenceSize;
+    return true;
   }
 }
