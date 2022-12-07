@@ -24,6 +24,7 @@ public class Day7 extends DailyChallenge {
   @Override
   public String part2(List<String> input) {
     Directory root = buildDirectoryStructure(input);
+
     int size = root.size();
     int remainingSpace = 70_000_000 - size;
     int requiredSpace = 30_000_000 - remainingSpace;
@@ -31,9 +32,7 @@ public class Day7 extends DailyChallenge {
     return "" + root.flatten()
         .map(Directory::size)
         .filter(s -> s >= requiredSpace)
-        .sorted()
-        .findFirst()
-        .orElseThrow();
+        .reduce(Integer.MAX_VALUE, (a, b) -> a < b ? a : b);
   }
 
   private Directory buildDirectoryStructure(List<String> input) {
