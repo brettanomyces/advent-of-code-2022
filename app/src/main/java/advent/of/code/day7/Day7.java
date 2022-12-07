@@ -2,7 +2,6 @@ package advent.of.code.day7;
 
 import advent.of.code.DailyChallenge;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -14,10 +13,33 @@ public class Day7 extends DailyChallenge {
 
   @Override
   public String part1(List<String> input) {
+    Directory root = buildDirectoryStructure(input);
+
+    return "" + root.flatMap()
+        .map(Directory::size)
+        .filter(size -> size < 100_000)
+        .reduce(0, Integer::sum);
+  }
+
+  @Override
+  public String part2(List<String> input) {
+    Directory root = buildDirectoryStructure(input);
+    int size = root.size();
+    int remainingSpace = 70_000_000 - size;
+    int requiredSpace = 30_000_000 - remainingSpace;
+
+    return "" + root.flatMap()
+        .map(Directory::size)
+        .filter(s -> s >= requiredSpace)
+        .sorted()
+        .findFirst()
+        .orElseThrow();
+  }
+
+  private Directory buildDirectoryStructure(List<String> input) {
     Directory root = null;
     Directory current = null;
     for (String line : input) {
-      System.out.println(line);
       if (line.equals("$ cd /")) {
         root = new Directory(null, "/");
         current = root;
@@ -37,15 +59,7 @@ public class Day7 extends DailyChallenge {
         current.file(new File(parts[1], Integer.parseInt(parts[0])));
       }
     }
-    return "" + root.flatMap()
-        .map(Directory::size)
-        .filter(size -> size < 100_000)
-        .reduce(0, Integer::sum);
-  }
-
-  @Override
-  public String part2(List<String> input) {
-    return null;
+    return root;
   }
 
   static class Directory {
@@ -89,8 +103,9 @@ public class Day7 extends DailyChallenge {
     }
   }
 
-  record File (
+  record File(
       String name,
       int size
-  ) { }
+  ) {
+  }
 }
