@@ -15,25 +15,25 @@ public abstract class DailyTest {
   }
 
   @Test
-  void runPart1Example() {
+  public void runPart1Example() {
     String result = day.part1(day.exampleData());
     assertEquals(results[0], result);
   }
 
   @Test
-  void runPart1() {
+  public void runPart1() {
     String result = day.part1(day.data());
     assertEquals(results[1], result);
   }
 
   @Test
-  void runPart2Example() {
+  public void runPart2Example() {
     String result = day.part2(day.exampleData());
     assertEquals(results[2], result);
   }
 
   @Test
-  void runPart2() {
+  public void runPart2() {
     String result = day.part2(day.data());
     assertEquals(results[3], result);
   }
