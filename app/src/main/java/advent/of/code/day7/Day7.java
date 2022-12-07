@@ -15,7 +15,7 @@ public class Day7 extends DailyChallenge {
   public String part1(List<String> input) {
     Directory root = buildDirectoryStructure(input);
 
-    return "" + root.flatMap()
+    return "" + root.flatten()
         .map(Directory::size)
         .filter(size -> size < 100_000)
         .reduce(0, Integer::sum);
@@ -28,7 +28,7 @@ public class Day7 extends DailyChallenge {
     int remainingSpace = 70_000_000 - size;
     int requiredSpace = 30_000_000 - remainingSpace;
 
-    return "" + root.flatMap()
+    return "" + root.flatten()
         .map(Directory::size)
         .filter(s -> s >= requiredSpace)
         .sorted()
@@ -66,6 +66,7 @@ public class Day7 extends DailyChallenge {
 
     private final String name;
     private final Directory parent;
+    private int size = 0;
 
     private final Map<String, Directory> subDirectories = new HashMap<>();
     private final Set<File> files = new HashSet<>();
@@ -85,21 +86,25 @@ public class Day7 extends DailyChallenge {
 
     public void file(File file) {
       files.add(file);
+      grow(file.size);
     }
 
-    public Stream<Directory> flatMap() {
+    public void grow(int amount) {
+      size += amount;
+      if (parent != null) {
+        parent.grow(amount);
+      }
+    }
+
+    public Stream<Directory> flatten() {
       return Stream.concat(
           subDirectories.values().stream(),
-          subDirectories.values().stream().flatMap(Directory::flatMap)
+          subDirectories.values().stream().flatMap(Directory::flatten)
       );
     }
 
     public int size() {
-      int sizeOfFiles = files.stream().map(File::size).reduce(0, Integer::sum);
-      int sizeOfDirs = subDirectories.values().stream().map(Directory::size).reduce(0, Integer::sum);
-      int total = sizeOfFiles + sizeOfDirs;
-
-      return total;
+      return size;
     }
   }
 
