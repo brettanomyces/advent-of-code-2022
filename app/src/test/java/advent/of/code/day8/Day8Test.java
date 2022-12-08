@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class Day8Test extends DailyTest {
 
   Day8Test() {
-    super(new Day8(), "21", "1805", null, null);
+    super(new Day8(), "21", "1805", "8", "444528");
   }
-
 }
