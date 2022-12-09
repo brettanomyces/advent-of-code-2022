@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 
-public class Day7 extends DailyChallenge {
+class Day7 extends DailyChallenge {
 
   @Override
   public String part1(List<String> input) {
