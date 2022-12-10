@@ -44,6 +44,48 @@ public class Day10 extends DailyChallenge {
 
   @Override
   public String part2(List<String> input) {
+    // https://stackoverflow.com/a/16812721/1427295
+    char[] screen = new String(new char[240]).replace("\0", ".").toCharArray();
+    print(screen);
+
+    // regX is sprite position. screen pixel will be drawn if regX +/- 1 == cycle, wher
+
+    int cycle = 0;
+    int regX = 1;
+
+    for (String line: input) {
+      String[] parts = line.split(" ");
+      switch (parts[0]) {
+
+        case "noop" -> {
+          draw(screen, cycle, regX);
+          cycle++;
+        }
+        case "addx" -> {
+          for (int i = 0; i < 2; i++) {
+            draw(screen, cycle, regX);
+            cycle++;
+          }
+          regX += Integer.parseInt(parts[1]);
+        }
+      }
+    }
+    print(screen);
+
     return null;
+  }
+
+  static void draw(char[] screen, int cursor, int spritePosition) {
+    int posInRow = cursor % 40;
+    if (spritePosition - 1 == posInRow || spritePosition == posInRow || spritePosition + 1 == posInRow) {
+      screen[cursor] = '#';
+    }
+  }
+
+  static void print(char[] screen) {
+    System.out.println("Screen:");
+    for (int i = 0; i < 240; i += 40) {
+      System.out.println(String.valueOf(screen, i, 40));
+    }
   }
 }
