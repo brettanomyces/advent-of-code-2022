@@ -48,8 +48,6 @@ public class Day10 extends DailyChallenge {
     char[] screen = new String(new char[240]).replace("\0", ".").toCharArray();
     print(screen);
 
-    // regX is sprite position. screen pixel will be drawn if regX +/- 1 == cycle, wher
-
     int cycle = 0;
     int regX = 1;
 
@@ -75,10 +73,10 @@ public class Day10 extends DailyChallenge {
     return null;
   }
 
-  static void draw(char[] screen, int cursor, int spritePosition) {
-    int posInRow = cursor % 40;
-    if (spritePosition - 1 == posInRow || spritePosition == posInRow || spritePosition + 1 == posInRow) {
-      screen[cursor] = '#';
+  static void draw(char[] screen, int cycle, int spritePosition) {
+    int cursor = cycle % 40;  // cursor is per row, each row is length 40
+    if (spritePosition - 1 == cursor || spritePosition == cursor || spritePosition + 1 == cursor) {
+      screen[cycle] = '#';
     }
   }
 
