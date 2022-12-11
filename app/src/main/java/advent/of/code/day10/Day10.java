@@ -5,6 +5,7 @@ import advent.of.code.DailyChallenge;
 import java.util.List;
 
 public class Day10 extends DailyChallenge {
+
   @Override
   public String part1(List<String> input) {
     int cycle = 0;
@@ -12,24 +13,20 @@ public class Day10 extends DailyChallenge {
     int checkAt = 20;
     int signalStrengthSum = 0;
 
-    for (String line: input) {
+    for (String line : input) {
       String[] parts = line.split(" ");
       switch (parts[0]) {
         case "noop" -> {
           cycle++;
           if (cycle == checkAt) {
-            int singleStrength = cycle * regX;
-            System.out.println("Signal Strength at " + checkAt + ": " + singleStrength +  ", regX: " + regX);
             signalStrengthSum += cycle * regX;
             checkAt += 40;
           }
         }
         case "addx" -> {
           for (int i = 0; i < 2; i++) {
-            cycle ++;
+            cycle++;
             if (cycle == checkAt) {
-              int singleStrength = cycle * regX;
-              System.out.println("Signal Strength at " + checkAt + ": " + singleStrength +  ", regX: " + regX);
               signalStrengthSum += cycle * regX;
               checkAt += 40;
             }
@@ -45,16 +42,15 @@ public class Day10 extends DailyChallenge {
   @Override
   public String part2(List<String> input) {
     // https://stackoverflow.com/a/16812721/1427295
-    char[] screen = new String(new char[240]).replace("\0", ".").toCharArray();
+    char[] screen = new String(new char[240]).replace("\0", " ").toCharArray();
     print(screen);
 
     int cycle = 0;
     int regX = 1;
 
-    for (String line: input) {
+    for (String line : input) {
       String[] parts = line.split(" ");
       switch (parts[0]) {
-
         case "noop" -> {
           draw(screen, cycle, regX);
           cycle++;
@@ -68,9 +64,8 @@ public class Day10 extends DailyChallenge {
         }
       }
     }
-    print(screen);
 
-    return null;
+    return print(screen);
   }
 
   static void draw(char[] screen, int cycle, int spritePosition) {
@@ -80,10 +75,12 @@ public class Day10 extends DailyChallenge {
     }
   }
 
-  static void print(char[] screen) {
-    System.out.println("Screen:");
+  static String print(char[] screen) {
+    StringBuilder str = new StringBuilder();
     for (int i = 0; i < 240; i += 40) {
-      System.out.println(String.valueOf(screen, i, 40));
+      str.append(screen, i, 40);
+      str.append("\n");
     }
+    return str.toString();
   }
 }
