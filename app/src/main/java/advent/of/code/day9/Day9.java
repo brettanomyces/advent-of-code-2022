@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Day9 extends DailyChallenge {
+class Day9 extends DailyChallenge {
 
   // ......
   // ......

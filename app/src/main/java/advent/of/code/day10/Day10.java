@@ -4,7 +4,7 @@ import advent.of.code.DailyChallenge;
 
 import java.util.List;
 
-public class Day10 extends DailyChallenge {
+class Day10 extends DailyChallenge {
 
   @Override
   public String part1(List<String> input) {
